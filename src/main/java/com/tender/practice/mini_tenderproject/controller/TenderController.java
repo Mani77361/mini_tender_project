@@ -72,7 +72,7 @@ public class TenderController {
 		
 		return ResponseEntity.noContent().build();
 	}
-	@GetMapping("status/{status}")
+	@GetMapping("/status/{status}")
 	public ResponseEntity<List<TenderResponse>> getTenderByStatus(@PathVariable String status){
 		
 		List<TenderResponse> response = tenderServiceImpl.getTenderByStatus(status);

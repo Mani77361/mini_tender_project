@@ -10,6 +10,7 @@ import com.tender.practice.mini_tenderproject.dto.TenderResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderStatusDetailsResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderStatusRequest;
 import com.tender.practice.mini_tenderproject.dto.TenderStatusResponse;
+import com.tender.practice.mini_tenderproject.entity.Tender;
 import com.tender.practice.mini_tenderproject.projection.TenderItemViewProjection;
 
 public interface TenderService {
@@ -45,6 +46,12 @@ public interface TenderService {
 	List<TenderOrganizationResponse> getTenderOrganixzationDetails();
 	
 	TenderStatusResponse updateTenderStatus(long id, TenderStatusRequest request);
+	
+	List<TenderResponse> getTenderStatus(String status);
+	
+	List<TenderResponse> getTenderTitle(String status);
+	
+	List<TenderResponse> getTenderStatuses(List<String> statuses);
 	
 	
 	

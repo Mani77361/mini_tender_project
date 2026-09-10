@@ -16,7 +16,7 @@ import com.tender.practice.mini_tenderproject.dto.TenderStatusResponse;
 import com.tender.practice.mini_tenderproject.entity.Tender;
 import com.tender.practice.mini_tenderproject.projection.TenderItemViewProjection;
 
-public interface TenderRepository extends JpaRepository<Tender,Long>{
+public interface TenderRepository extends JpaRepository<Tender,Long>,TenderCustomRepo{
 	
 	List<Tender> findTenderByStatus(String status);
 	
@@ -97,3 +97,5 @@ public interface TenderRepository extends JpaRepository<Tender,Long>{
 	  
 	  
 }
+
+

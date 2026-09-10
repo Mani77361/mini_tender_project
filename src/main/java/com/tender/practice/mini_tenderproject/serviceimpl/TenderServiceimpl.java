@@ -330,6 +330,63 @@ public class TenderServiceimpl implements TenderService{
 		
 		return response;
 	}
+
+	@Override
+	public List<TenderResponse> getTenderStatus(String status) {
+		List<Tender> tenders = tenderRepository.findByStatus(status);
+		
+		List<TenderResponse> response = new ArrayList<>();
+		
+		for(Tender responses:tenders) {
+			
+			TenderResponse result = new TenderResponse();
+			
+			result.setStatus(responses.getStatus());
+			
+			response.add(result);
+		}
+		
+		
+		return response;
+	}
+
+	@Override
+	public List<TenderResponse> getTenderTitle(String status) {
+		 List<Tender> tenders = tenderRepository.findTenderByTitle(status);
+		 
+		 List<TenderResponse> responses = new ArrayList<>();
+		 
+		 for(Tender tender : tenders) {
+			 
+			 TenderResponse response = new TenderResponse();
+			 
+			 response.setTitle(tender.getTitle());
+			 
+			 responses.add(response);
+		 }
+		
+		return responses;
+	}
+
+	@Override
+	public List<TenderResponse> getTenderStatuses(List<String> statuses) {
+		List<Tender> tenders =tenderRepository.findByStatuses(statuses);
+		
+		List<TenderResponse> responses =new ArrayList<>();
+		
+		for(Tender response : tenders) {
+			
+			TenderResponse result = new TenderResponse();
+			
+			result.setStatus(response.getStatus());
+			
+			responses.add(result);
+			
+		}
+		
+		
+		return responses;
+	}
 	
 	
 	/*

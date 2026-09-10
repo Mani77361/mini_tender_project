@@ -167,9 +167,31 @@ public class TenderController {
 		
 		
 	}
-	
-	
-	
+	@GetMapping("/statusby/{status}")
+	public ResponseEntity<List<TenderResponse>> getTenderStatus(@PathVariable String status){
+		
+		List<TenderResponse> response = tenderServiceImpl.getTenderStatus(status);
+		
+		return new ResponseEntity<>(response ,HttpStatus.OK);
+		
+	}
+	@GetMapping("/titleby/{title}")
+	public ResponseEntity<List<TenderResponse>> findByTitle(@PathVariable String title){
+		
+		List<TenderResponse> response = tenderServiceImpl.findTenderByTitle(title);
+		
+		return new ResponseEntity<>(response, HttpStatus.OK);
+		
+		
+	}
+	@GetMapping("/statuses/status")
+	public ResponseEntity<List<TenderResponse>> findByStatuses(@RequestParam  List<String> statuses){
+		
+		List<TenderResponse> response = tenderServiceImpl.getTenderStatuses(statuses);
+		
+		return new ResponseEntity<>(response, HttpStatus.OK);
+		
+	}
 	
 	
 }

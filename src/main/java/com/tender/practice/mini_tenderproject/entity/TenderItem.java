@@ -7,6 +7,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +25,10 @@ public class TenderItem {
 	@GeneratedValue(strategy =  GenerationType.IDENTITY)
 	@Column(name ="tender_item_id")
 	private Long tendrItemId;
+	
+	@ManyToOne
+	@JoinColumn(name = "tender_id",insertable = false, updatable = false)
+	private Tender tender;
 	
 	@Column(name = "tender_id")
 	private Long tenderId;

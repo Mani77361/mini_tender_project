@@ -2,6 +2,7 @@ package com.tender.practice.mini_tenderproject.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -9,22 +10,28 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tender.practice.mini_tenderproject.dto.TenderItemViewResponse;
+import com.tender.practice.mini_tenderproject.dto.TenderOrganizationResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderRequest;
 import com.tender.practice.mini_tenderproject.dto.TenderResponse;
+import com.tender.practice.mini_tenderproject.dto.TenderStatusDetailsResponse;
+import com.tender.practice.mini_tenderproject.dto.TenderStatusRequest;
+import com.tender.practice.mini_tenderproject.dto.TenderStatusResponse;
 import com.tender.practice.mini_tenderproject.repository.TenderRepository;
 import com.tender.practice.mini_tenderproject.serviceimpl.TenderServiceimpl;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/tender")
 public class TenderController {
-
+	@Autowired
     private final TenderRepository tenderRepository;
 
     private final TenderServiceimpl tenderServiceImpl;
@@ -39,6 +46,7 @@ public class TenderController {
 	
 	@PostMapping("/create")
 	public ResponseEntity<TenderResponse> createTender(@Valid @RequestBody TenderRequest request){
+		System.out.println("REQUEST OBJECT = " + request);
 		TenderResponse tender = tenderServiceImpl.createTender(request);
 		
 		return new ResponseEntity<>(tender ,HttpStatus.CREATED);
@@ -136,6 +144,31 @@ public class TenderController {
 		
 		
 	}
+	@GetMapping("/status")
+	public ResponseEntity<List<TenderStatusDetailsResponse>> gteTenderStatusDetails(@RequestParam List<String> statuses ){
+		
+		return ResponseEntity.ok(tenderServiceImpl.getTenderStatusOrStatus(statuses));
+		
+	}
+	@GetMapping("/details")
+	public ResponseEntity<List<TenderOrganizationResponse>> getTenderOrganizationDetails(){
+		
+		List<TenderOrganizationResponse> response = tenderServiceImpl.getTenderOrganixzationDetails();
+		
+		return new ResponseEntity<>(response, HttpStatus.OK);
+		
+	}
+	@PutMapping("/updatestatus/{id}")
+	public ResponseEntity<TenderStatusResponse> updateTenderStatus(@PathVariable Long id,@RequestBody TenderStatusRequest request){
+		
+		TenderStatusResponse response = tenderServiceImpl.updateTenderStatus(id, request);
+		
+		return new ResponseEntity<>(response ,HttpStatus.OK);
+		
+		
+	}
+	
+	
 	
 	
 	

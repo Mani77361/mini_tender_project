@@ -1,5 +1,6 @@
 package com.tender.practice.mini_tenderproject.repository;
 
+import java.io.ObjectInputFilter.Status;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -7,6 +8,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.tender.practice.mini_tenderproject.TenderStatusProjection.TenderStatusProjection;
+import com.tender.practice.mini_tenderproject.dto.TenderOrganizationResponse;
+import com.tender.practice.mini_tenderproject.dto.TenderResponse;
+import com.tender.practice.mini_tenderproject.dto.TenderStatusRequest;
+import com.tender.practice.mini_tenderproject.dto.TenderStatusResponse;
 import com.tender.practice.mini_tenderproject.entity.Tender;
 import com.tender.practice.mini_tenderproject.projection.TenderItemViewProjection;
 
@@ -62,5 +68,32 @@ public interface TenderRepository extends JpaRepository<Tender,Long>{
 	  		 		FROM tender t JOIN tender_item ti ON t.tender_id= ti.tender_id""",
 	  		nativeQuery = true)
 	  List<TenderItemViewProjection> getTenderItemDetails();
+	  
+	  
+	  List<Tender> findByStatusIn(List<String> statuses);
+	  
+	  
+	  @Query(value = """
+	  			SELECT t.tender_id AS tenderId,
+				t.title AS title,
+				t.description AS description,
+				t.status AS status,
+				ti.tender_item_id AS tenderItemId ,
+				ti.quantity AS quantity,
+				ti.unit AS unit ,
+				ti.unit_price AS price FROM tender t JOIN tender_item ti ON t.tender_id = ti.tender_id 
+		  		where t.status IN (:statuses)
+		  		""",
+					nativeQuery = true)
+	 
+	  List<TenderStatusProjection> findTenderStatusDetails(@Param("statuses") List<String> statuses);
+	  
+	  
+	  @Query("""
+	  		SELECT new com.tender.practice.mini_tenderproject.dto.TenderOrganizationResponse(t.tenderNumber,t.title,t.status,o.organizationName,o.department) FROM Tender t JOIN t.organization o 
+	  		""")
+	  List<TenderOrganizationResponse> findTenderOrgaqnizationDetails();
+	  
+	  
 	  
 }

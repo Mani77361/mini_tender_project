@@ -9,10 +9,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.tender.practice.mini_tenderproject.MiniTenderprojectApplication;
+import com.tender.practice.mini_tenderproject.TenderStatusProjection.TenderStatusProjection;
 import com.tender.practice.mini_tenderproject.controller.tenderItemController;
 import com.tender.practice.mini_tenderproject.dto.TenderItemViewResponse;
+import com.tender.practice.mini_tenderproject.dto.TenderOrganizationResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderRequest;
 import com.tender.practice.mini_tenderproject.dto.TenderResponse;
+import com.tender.practice.mini_tenderproject.dto.TenderStatusDetailsResponse;
+import com.tender.practice.mini_tenderproject.dto.TenderStatusRequest;
+import com.tender.practice.mini_tenderproject.dto.TenderStatusResponse;
 import com.tender.practice.mini_tenderproject.entity.Tender;
 import com.tender.practice.mini_tenderproject.projection.TenderItemViewProjection;
 import com.tender.practice.mini_tenderproject.repository.TenderRepository;
@@ -23,13 +28,13 @@ public class TenderServiceimpl implements TenderService{
 
   //  /*~~(Unable to determine parameter type)~~>*/private final controller.tenderItemController tenderItemController;
 
-    private final MiniTenderprojectApplication miniTenderprojectApplication;
+  //  private final MiniTenderprojectApplication miniTenderprojectApplication;
 
 	private final TenderRepository tenderRepository;
 	
 	public TenderServiceimpl(TenderRepository tenderRepository, MiniTenderprojectApplication miniTenderprojectApplication) {
 		this.tenderRepository = tenderRepository;
-		this.miniTenderprojectApplication = miniTenderprojectApplication;
+	//	this.miniTenderprojectApplication = miniTenderprojectApplication;
 	}
 	
 	@Override
@@ -280,6 +285,53 @@ public class TenderServiceimpl implements TenderService{
 	            .toList();
 	}
 
+	@Override
+	public List<TenderStatusDetailsResponse> getTenderStatusOrStatus(List<String> statuses) {
+	
+		List<TenderStatusProjection> results = tenderRepository.findTenderStatusDetails(statuses);
+		
+		
+		return results.stream()
+				.map(tender -> TenderStatusDetailsResponse.builder()
+						.tenderId(tender.getTenderId())
+						.title(tender.getTitle())
+						.description(tender.getDescribtion())
+						.status(tender.getStatus())
+						.tenderItemId(tender.getTenderItemId())
+						.quantity(tender.getQuantity())
+						.unit(tender.getUnit())
+						.price(tender.getPrice())
+						.build()
+						)
+				.toList();
+						
+			}
+
+	@Override
+	public List<TenderOrganizationResponse> getTenderOrganixzationDetails() {
+
+		return tenderRepository.findTenderOrgaqnizationDetails();
+		
+		
+	}
+
+	@Override
+	public TenderStatusResponse updateTenderStatus(long id, TenderStatusRequest request) {
+		Tender tender = tenderRepository.findById(id).orElseThrow(() -> new RuntimeException(" Tende Id Not Fount Exception :" + id));
+		
+		 	tender.setStatus(request.getStatus());
+		 	
+		 	Tender saveStatus = tenderRepository.save(tender);
+		 	
+		 	TenderStatusResponse response = new TenderStatusResponse();
+		 	
+		 	response.setStatus(saveStatus.getStatus());
+
+		
+		return response;
+	}
+	
+	
 	/*
 	 * @Override public List<TenderResponse> getTenderByOrganizationId(Long id) {
 	 * List<Tender> tenders =

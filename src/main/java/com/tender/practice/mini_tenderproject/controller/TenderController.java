@@ -193,6 +193,16 @@ public class TenderController {
 		
 	}
 	
+	@PutMapping("/updateby/{id}")
+	public ResponseEntity<TenderStatusResponse> updateTenderStatus(@PathVariable long id,@RequestBody TenderStatusRequest request){
+		TenderStatusResponse response =tenderServiceImpl.updateTenderStatus(id, request);
+		
+		return ResponseEntity.ok(response);
+		
+		
+	}
+	
+	
 	
 }
 

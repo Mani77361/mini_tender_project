@@ -11,5 +11,9 @@ public interface TenderCustomRepo {
 	List<Tender> findTenderByTitle(String title);
 	
 	List<Tender> findByStatuses(List<String> statuses );
+	
+	int updateTenderStatus(long id,String status);
+	
+	List<Tender> findStatus(String status);
 
 }

@@ -53,6 +53,9 @@ public interface TenderService {
 	
 	List<TenderResponse> getTenderStatuses(List<String> statuses);
 	
+	TenderResponse updateTenderStatus(Long id,String status);
+	
+	List<TenderResponse> gettenderStatus(String status);
 	
 	
 	

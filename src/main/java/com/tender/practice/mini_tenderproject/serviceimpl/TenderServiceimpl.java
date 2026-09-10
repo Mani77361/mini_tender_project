@@ -10,6 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.tender.practice.mini_tenderproject.MiniTenderprojectApplication;
 import com.tender.practice.mini_tenderproject.TenderStatusProjection.TenderStatusProjection;
+import com.tender.practice.mini_tenderproject.controller.TenderController;
 import com.tender.practice.mini_tenderproject.controller.tenderItemController;
 import com.tender.practice.mini_tenderproject.dto.TenderItemViewResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderOrganizationResponse;
@@ -26,14 +27,17 @@ import com.tender.practice.mini_tenderproject.service.TenderService;
 @Service
 public class TenderServiceimpl implements TenderService{
 
+    private final TenderController tenderController;
+
   //  /*~~(Unable to determine parameter type)~~>*/private final controller.tenderItemController tenderItemController;
 
   //  private final MiniTenderprojectApplication miniTenderprojectApplication;
 
 	private final TenderRepository tenderRepository;
 	
-	public TenderServiceimpl(TenderRepository tenderRepository, MiniTenderprojectApplication miniTenderprojectApplication) {
+	public TenderServiceimpl(TenderRepository tenderRepository, MiniTenderprojectApplication miniTenderprojectApplication, TenderController tenderController) {
 		this.tenderRepository = tenderRepository;
+		this.tenderController = tenderController;
 	//	this.miniTenderprojectApplication = miniTenderprojectApplication;
 	}
 	
@@ -384,6 +388,41 @@ public class TenderServiceimpl implements TenderService{
 			
 		}
 		
+		
+		return responses;
+	}
+
+	@Override
+	public TenderResponse updateTenderStatus(Long id, String status) {
+		Tender tender =tenderRepository.findById(id).orElseThrow(() -> new RuntimeException("Tender Id Not Found :" + id));
+		
+		
+		tender.setStatus(status);
+		
+		Tender savedTender =  tenderRepository.save(tender);
+		TenderResponse response =new TenderResponse();
+		
+		response.setId(savedTender.getId());
+		response.setStatus(savedTender.getStatus());
+		
+		return response;
+	}
+
+	@Override
+	public List<TenderResponse> gettenderStatus(String status) {
+		
+		List<Tender> tenders = tenderRepository.findStatus(status);
+		
+		List<TenderResponse> responses = new ArrayList<>();
+		
+		for(Tender tender : tenders) {
+		
+		TenderResponse response = new TenderResponse();
+		
+		response.setStatus(tender.getStatus());
+		
+		responses.add(response);
+		}
 		
 		return responses;
 	}

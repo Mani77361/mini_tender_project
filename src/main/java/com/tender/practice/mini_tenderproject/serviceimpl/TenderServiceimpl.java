@@ -27,17 +27,17 @@ import com.tender.practice.mini_tenderproject.service.TenderService;
 @Service
 public class TenderServiceimpl implements TenderService{
 
-    private final TenderController tenderController;
-
+    
   //  /*~~(Unable to determine parameter type)~~>*/private final controller.tenderItemController tenderItemController;
 
   //  private final MiniTenderprojectApplication miniTenderprojectApplication;
 
 	private final TenderRepository tenderRepository;
 	
-	public TenderServiceimpl(TenderRepository tenderRepository, MiniTenderprojectApplication miniTenderprojectApplication, TenderController tenderController) {
+	public TenderServiceimpl(TenderRepository tenderRepository) {
+
 		this.tenderRepository = tenderRepository;
-		this.tenderController = tenderController;
+	
 	//	this.miniTenderprojectApplication = miniTenderprojectApplication;
 	}
 	
@@ -426,6 +426,28 @@ public class TenderServiceimpl implements TenderService{
 		
 		return responses;
 	}
+
+	@Override
+	public List<TenderResponse> getstatuses(List<String> statuses) {
+		
+		List<Tender> tenders = tenderRepository.findStatuses(statuses);
+		
+		List<TenderResponse> responses = new ArrayList<>();
+		
+		for(Tender tender : tenders) {
+			
+			TenderResponse response = new TenderResponse();
+			
+			response.setStatus(tender.getStatus());
+			
+			responses.add(response);
+			
+			
+		}
+		
+		return responses;
+	}
+
 	
 	
 	/*

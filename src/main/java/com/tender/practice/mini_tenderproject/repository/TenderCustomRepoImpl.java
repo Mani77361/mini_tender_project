@@ -50,29 +50,42 @@ public class TenderCustomRepoImpl implements TenderCustomRepo{
 
 
 
-
-@Override
-public int updateTenderStatus(long id, String status) {
-	return entityManager.
-			  createQuery("UPDATE Tender t SET t.status = :status WHERE t.tenderId = :tenderId")
-			  .setParameter("status", status) 
-			  .setParameter("id", id)
-			  .executeUpdate();
-			 
-}
-
-
+		
+		@Override
+		public int updateTenderStatus(long id, String status) {
+			return entityManager.
+					  createQuery("UPDATE Tender t SET t.status = :status WHERE t.tenderId = :tenderId")
+					  .setParameter("status", status) 
+					  .setParameter("id", id)
+					  .executeUpdate();
+					 
+		}
 
 
-@Override
-public List<Tender> findStatus(String status) {
-	
-	return entityManager.createNativeQuery("select * from tender where status (:status)",Tender.class)
-			.setParameter("status", status)
-			.getResultList();
-	
-	
-}
+		
+		
+		
+		@SuppressWarnings("unchecked")
+		@Override
+		public List<Tender> findStatus(String status) {
+			
+			return entityManager.createNativeQuery("select * from tender where status (:status)",Tender.class)
+					.setParameter("status", status)
+					.getResultList();
+			
+			
+		}
+		
+		@SuppressWarnings("unchecked")
+		@Override
+		public List<Tender> findStatuses(List<String> statuses) {
+			
+			return entityManager.createNativeQuery("select * from tender where status IN (:statuses) ")
+					.setParameter("statuses", statuses)
+					.getResultList();	
+			
+			
+		}
 
 
 	

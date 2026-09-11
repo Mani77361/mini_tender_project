@@ -31,16 +31,14 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/tender")
 public class TenderController {
-	@Autowired
-    private final TenderRepository tenderRepository;
 
     private final TenderServiceimpl tenderServiceImpl;
 	
-	public TenderController(TenderServiceimpl tenderServiceimpl, TenderRepository tenderRepository) {
+	public TenderController(TenderServiceimpl tenderServiceimpl) {
 		
 		this.tenderServiceImpl = tenderServiceimpl;
 		
-		this.tenderRepository = tenderRepository;
+		
 	}
 	
 	
@@ -95,7 +93,7 @@ public class TenderController {
 		List<TenderResponse> response = tenderServiceImpl.findTenderByTitle(title);
 		
 		return ResponseEntity.ok(response);
-		
+			
 		
 	}
 	@GetMapping("/titleandstatus/{title}/{status}")
@@ -202,7 +200,15 @@ public class TenderController {
 		
 	}
 	
-	
+	@GetMapping("/sta/status")
+	public ResponseEntity<List<TenderResponse>> getstatuses(@RequestParam List<String> statuses){
+		
+		List<TenderResponse> response = tenderServiceImpl.getstatuses(statuses);
+		
+		return ResponseEntity.ok(response);
+		
+		
+	}
 	
 }
 

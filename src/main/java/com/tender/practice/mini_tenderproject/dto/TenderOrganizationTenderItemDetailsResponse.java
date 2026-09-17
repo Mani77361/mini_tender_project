@@ -1,15 +1,13 @@
 package com.tender.practice.mini_tenderproject.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-public class TenderOrganizationResponse {
+@AllArgsConstructor
+public class TenderOrganizationTenderItemDetailsResponse {
 	
 	private String tenderNumber;
 	
@@ -17,8 +15,14 @@ public class TenderOrganizationResponse {
 	
 	private String status;
 	
-	private String OrganizationName;
+	private String Organizationname;
 	
 	private String department;
-
+	
+	private String itemName;
+	
+	private String description;
+	
+	private Integer quantity;
+	
 }

@@ -5,11 +5,16 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tender.practice.mini_tenderproject.dto.TenderTitleAndstatusResponse;
+import com.tender.practice.mini_tenderproject.dto.TenderOrganizationResponse;
+import com.tender.practice.mini_tenderproject.dto.TenderOrganizationTenderItemDetailsResponse;
+import com.tender.practice.mini_tenderproject.dto.TenderRequest;
+import com.tender.practice.mini_tenderproject.dto.TenderResponse;
 import com.tender.practice.mini_tenderproject.entity.Tender;
 import com.tender.practice.mini_tenderproject.service.TenderJdbcService;
 
@@ -55,7 +60,25 @@ public class TenderJdbcController {
 		
 		
 	}
-	
+	@GetMapping("/details")
+	public ResponseEntity<List<TenderOrganizationResponse>> findTederOrganizationDetails(){
+		
+		return ResponseEntity.ok(tenderJdbcService.findTenderOrganizationDetails());
+		
+		
+	}
+	@GetMapping("/detailss/de")
+	public ResponseEntity<List<TenderOrganizationTenderItemDetailsResponse>> findTenderOrganizationTenderItem(){
+		
+		return ResponseEntity.ok(tenderJdbcService.findByTenderOrganizationTenderItemResponse());
+		
+	}
+	 @PutMapping("update/up/{id}")
+	public ResponseEntity<TenderResponse> updateTender(@PathVariable Long id , @RequestBody TenderRequest request){
+		 
+		 return ResponseEntity.ok(tenderJdbcService.updateTender(id, request));
+		 
+	 }
 	
 	
 }

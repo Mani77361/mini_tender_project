@@ -1,12 +1,13 @@
 package com.tender.practice.mini_tenderproject.repository;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.tender.practice.mini_tenderproject.dto.TenderBidResponse;
+import com.tender.practice.mini_tenderproject.dto.TenderConditionResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderOrganizationResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderOrganizationTenderItemDetailsResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderRequest;
@@ -210,7 +211,7 @@ public class TenderJdbcRepositoryImpl implements TenderJdbcRepository{
 
 
 	@Override
-	public TenderResponse findByTenderOrgganizatioDetailsWithCondition(Long organizationId, String status,
+	public List<TenderConditionResponse>  findByTenderOrgganizatioDetailsWithCondition(Long organizationId, String status,
 			BigDecimal estimatedValue) {
 	
 		String sql = """
@@ -225,20 +226,122 @@ public class TenderJdbcRepositoryImpl implements TenderJdbcRepository{
 						FROM tender t JOIN organization o ON t.organization_id = o.organization_id
 						
 						WHERE 
-							organization_id =?,
-							AND status = ?,
-							AND estimated_value = ?							 
-				
+							t.organization_id =?
+							AND t.status = ?
+							AND t.estimated_value = ?							 
 				
 				""";
 		
 		
 		return jdbcTemplate.query(sql, 
 							new TenderConditionRowMapper(),
-							organization_id,
+							organizationId,
 							status ,
-							estimated_value
+							estimatedValue
 							);
+	}
+
+
+
+	@Override
+	public List<TenderOrganizationTenderItemDetailsResponse> findBytenderOrganizationTenderItemDeatails(String status, Long organizationId,
+			Integer minValue, Integer maxValue, String title) {
+		
+		StringBuilder sql = new StringBuilder("""
+													SELECT t.tender_id,
+														   t.tender_number,
+														   t.title,
+														   t.status,
+														   t.estimated_value,
+														   o.organization_name,
+														   o.department,
+														   ti.item_name,
+														   ti.quantity
+														   
+														   FROM tender t JOIN organization o ON t.organization_id = o.organization_id
+														   				 JOIN tender_item ti ON t.tender_id = ti.tender_id
+														   				 
+														   		WHERE  1=1	
+				""");
+		List<Object> param = new ArrayList<>();
+		
+		if(status != null) {
+			
+			sql.append(" AND t.status = ?");
+			param.add(status);
+		}
+		if(organizationId != null) {
+			
+			sql.append(" AND t.organization_id = ?");
+			param.add(organizationId);
+			
+		}
+		if(minValue != null) {
+			sql.append(" AND t.estimated_value >= ?");
+			param.add(minValue);
+			
+		}
+		if(maxValue != null) {
+			sql.append(" AND t.estimated_value <= ?");
+			param.add(maxValue);
+			
+		}
+		if(title != null && !title.isBlank()) {
+			sql.append(" AND LOWER(t.title) LIKE LOWER(?)");
+			param.add("%" + title + "%");
+				
+		}
+		
+		return jdbcTemplate.query(sql.toString(),
+									new TenderSearchConditionRowMapper(),
+									param.toArray()	
+				);
+				
+				
+							
+	}
+
+
+
+	@Override
+	public List<TenderBidResponse> findTenderBid(String status,String title) {
+
+		String sql = """
+			    SELECT
+			        t.tender_number,
+			        t.title,
+			        t.status,
+			        t.estimated_value,
+			        o.organization_name,
+			        o.department,
+			        COUNT(DISTINCT ti.tender_item_id) AS totalItems,
+			        COUNT(DISTINCT b.bid_id) AS totalBids,
+			        MIN(b.bid_amount) AS lowestBidAmount,
+			        MAX(b.bid_amount) AS highestBidAmount
+			    FROM tender t
+			    JOIN organization o
+			        ON t.organization_id = o.organization_id
+			    JOIN tender_item ti
+			        ON ti.tender_id = t.tender_id
+			    JOIN bid b
+			        ON t.tender_id = b.tender_id
+			    WHERE t.status = ?
+			    	OR t.title = ?
+			    GROUP BY
+			        t.tender_number,
+			        t.title,
+			        t.status,
+			        t.estimated_value,
+			        o.organization_name,
+			        o.department
+			    """;
+
+			return jdbcTemplate.query(
+			    sql,
+			    new TenderBidRowMapper(),
+			    status,
+			    title
+			);
 	}
 
 

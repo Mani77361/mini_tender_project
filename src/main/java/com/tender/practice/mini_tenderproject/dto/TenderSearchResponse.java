@@ -7,10 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class TenderOrganizationTenderItemDetailsResponse {
-	
+@NoArgsConstructor
+public class TenderSearchResponse {
 	
 	private Long tenderId;
 	
@@ -22,12 +21,12 @@ public class TenderOrganizationTenderItemDetailsResponse {
 	
 	private BigDecimal estimatedValue;
 	
-	private String OrganizationName;
+	private String organizationName;
 	
-	private String department;
+	private String departmaent;
 	
 	private String itemName;
 	
 	private Integer quantity;
-	
+
 }

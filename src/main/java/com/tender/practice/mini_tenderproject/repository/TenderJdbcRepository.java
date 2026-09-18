@@ -3,6 +3,8 @@ package com.tender.practice.mini_tenderproject.repository;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.tender.practice.mini_tenderproject.dto.TenderBidResponse;
+import com.tender.practice.mini_tenderproject.dto.TenderConditionResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderOrganizationResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderOrganizationTenderItemDetailsResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderRequest;
@@ -28,8 +30,9 @@ public interface TenderJdbcRepository {
 	
 	TenderResponse updateTender(Long id,TenderRequest request);
 	
-	TenderResponse findByTenderOrgganizatioDetailsWithCondition(Long organizationId,String status,BigDecimal estimatedValue);
+	List<TenderConditionResponse> findByTenderOrgganizatioDetailsWithCondition(Long organizationId,String status,BigDecimal estimatedValue);
 	
+	List<TenderOrganizationTenderItemDetailsResponse> findBytenderOrganizationTenderItemDeatails( String status,Long organizationId,Integer minValue,Integer maxvalue,String title);
 	
-	
+	List<TenderBidResponse> findTenderBid(String status,String title);
 }

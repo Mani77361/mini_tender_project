@@ -11,3 +11,16 @@ public class MiniTenderprojectApplication {
 	}
 
 }
+
+
+
+
+
+
+/*
+ * sysstage@nic.in
+ * 
+ * Admin12$ invalid credential appadmin@nic.in Admin123$( this id - Enroll
+ * signing certificate OTP generate aguthu )
+ * https://demoetenders.tn.nic.in/nicgep_msme/app -link is correct
+ */

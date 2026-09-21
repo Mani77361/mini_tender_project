@@ -1,5 +1,6 @@
 package com.tender.practice.mini_tenderproject.serviceimpl;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.tender.practice.mini_tenderproject.dto.LoginRequest;
@@ -12,9 +13,11 @@ import com.tender.practice.mini_tenderproject.service.UserService;
 public class UserServiceImpl implements UserService {
 	
 	private final UserRepository userRepository;
+	private final PasswordEncoder passwordEncoder;
 	
-	public UserServiceImpl(UserRepository userRepository) {
+	public UserServiceImpl(UserRepository userRepository,PasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	@Override

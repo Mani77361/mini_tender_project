@@ -1,6 +1,5 @@
 package com.tender.practice.mini_tenderproject.repository;
 
-import java.io.ObjectInputFilter.Status;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -10,9 +9,6 @@ import org.springframework.data.repository.query.Param;
 
 import com.tender.practice.mini_tenderproject.TenderStatusProjection.TenderStatusProjection;
 import com.tender.practice.mini_tenderproject.dto.TenderOrganizationResponse;
-import com.tender.practice.mini_tenderproject.dto.TenderResponse;
-import com.tender.practice.mini_tenderproject.dto.TenderStatusRequest;
-import com.tender.practice.mini_tenderproject.dto.TenderStatusResponse;
 import com.tender.practice.mini_tenderproject.entity.Tender;
 import com.tender.practice.mini_tenderproject.projection.TenderItemViewProjection;
 
@@ -47,14 +43,6 @@ public interface TenderRepository extends JpaRepository<Tender,Long>,TenderCusto
 	 
 	List<Tender> findOpenTenderByClosingWithInDays(@Param("today") LocalDate today,
 																@Param("endDate") LocalDate endDate);
-	  
-	/*
-	 * @Query(""" SELECT t,o FROM Tender t ,organization o WHERE t.organizationId =
-	 * o.organizationId AND o.organizationId = :organizationId """) List<Tender>
-	 * getTenderCreatedByPerticularOrganization(@Param("organizationId") Long
-	 * organizationId);
-	 */
-	  
 	  
 	  
 	  

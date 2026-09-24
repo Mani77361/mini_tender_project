@@ -1,5 +1,6 @@
 package com.tender.practice.mini_tenderproject.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tender.practice.mini_tenderproject.dto.TenderBidOrganizationReportResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderItemViewResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderOrganizationResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderRequest;
@@ -22,6 +24,7 @@ import com.tender.practice.mini_tenderproject.dto.TenderResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderStatusDetailsResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderStatusRequest;
 import com.tender.practice.mini_tenderproject.dto.TenderStatusResponse;
+import com.tender.practice.mini_tenderproject.projection.TenderBidOrganizationReportProjection;
 import com.tender.practice.mini_tenderproject.repository.TenderRepository;
 import com.tender.practice.mini_tenderproject.serviceimpl.TenderServiceimpl;
 
@@ -206,6 +209,15 @@ public class TenderController {
 		List<TenderResponse> response = tenderServiceImpl.getstatuses(statuses);
 		
 		return ResponseEntity.ok(response);
+		
+		
+	}
+	@GetMapping("/reports")
+	public ResponseEntity<List<TenderBidOrganizationReportResponse>> getTenderBidOrganizationReport(@RequestParam String status,
+																										@RequestParam BigDecimal estimatedValue){
+		
+		return ResponseEntity.ok(tenderServiceImpl.gettenderBidOrganizationreport(status, estimatedValue));
+		
 		
 		
 	}

@@ -1,5 +1,6 @@
   	package com.tender.practice.mini_tenderproject.serviceimpl;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ import com.tender.practice.mini_tenderproject.MiniTenderprojectApplication;
 import com.tender.practice.mini_tenderproject.TenderStatusProjection.TenderStatusProjection;
 import com.tender.practice.mini_tenderproject.controller.TenderController;
 import com.tender.practice.mini_tenderproject.controller.tenderItemController;
+import com.tender.practice.mini_tenderproject.dto.TenderBidOrganizationReportResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderItemViewResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderOrganizationResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderRequest;
@@ -20,6 +22,7 @@ import com.tender.practice.mini_tenderproject.dto.TenderStatusDetailsResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderStatusRequest;
 import com.tender.practice.mini_tenderproject.dto.TenderStatusResponse;
 import com.tender.practice.mini_tenderproject.entity.Tender;
+import com.tender.practice.mini_tenderproject.projection.TenderBidOrganizationReportProjection;
 import com.tender.practice.mini_tenderproject.projection.TenderItemViewProjection;
 import com.tender.practice.mini_tenderproject.repository.TenderRepository;
 import com.tender.practice.mini_tenderproject.service.TenderService;
@@ -448,6 +451,29 @@ public class TenderServiceimpl implements TenderService{
 		return responses;
 	}
 
+	@Override
+	public List<TenderBidOrganizationReportResponse> gettenderBidOrganizationreport(String status,
+			BigDecimal estimatedValue) {
+		
+		List<TenderBidOrganizationReportProjection> result= tenderRepository.findTenderBidOrganizationReport(status, estimatedValue);
+		
+		
+		return result.stream()
+				.map(r -> new TenderBidOrganizationReportResponse(
+															r.getTenderNumber(),
+															r.getTitle(),
+															r.getStatus(),
+															r.getEstimatedValue(),
+															r.getOrganizationName(),
+															r.getDepartment(),
+															r.getTotalItem(),
+															r.getTotalBid(),
+															r.getLowestBidAmount(),
+															r.getHighestBidAmount()
+															))
+				.toList();
+	}
+
 	
 	
 	/*
@@ -465,4 +491,12 @@ public class TenderServiceimpl implements TenderService{
 	 */
 	
 }
+
+// 1.Native + Object[] - get data form postgres directly an d and its convert to Dto response  logic in your service
+
+//2.
+
+
+
+
 

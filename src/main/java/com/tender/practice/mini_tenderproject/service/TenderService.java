@@ -1,8 +1,10 @@
 package com.tender.practice.mini_tenderproject.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.tender.practice.mini_tenderproject.TenderStatusProjection.TenderStatusProjection;
+import com.tender.practice.mini_tenderproject.dto.TenderBidOrganizationReportResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderItemViewResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderOrganizationResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderRequest;
@@ -60,6 +62,8 @@ public interface TenderService {
 	//List<TenderResponse> getstatuses(List<String> statuses);
 
 	List<TenderResponse> getstatuses(List<String> statuses);
+	
+	List<TenderBidOrganizationReportResponse> gettenderBidOrganizationreport(String status , BigDecimal estimatedValue);
 	
 	
 	

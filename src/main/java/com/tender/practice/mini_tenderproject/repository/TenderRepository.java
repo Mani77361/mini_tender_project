@@ -1,5 +1,6 @@
 package com.tender.practice.mini_tenderproject.repository;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -8,8 +9,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.tender.practice.mini_tenderproject.TenderStatusProjection.TenderStatusProjection;
+import com.tender.practice.mini_tenderproject.dto.TenderBidOrganizationReportResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderOrganizationResponse;
+import com.tender.practice.mini_tenderproject.dto.TenderResponse;
 import com.tender.practice.mini_tenderproject.entity.Tender;
+import com.tender.practice.mini_tenderproject.projection.TenderBidOrganizationReportProjection;
 import com.tender.practice.mini_tenderproject.projection.TenderItemViewProjection;
 
 public interface TenderRepository extends JpaRepository<Tender,Long>,TenderCustomRepo{
@@ -64,7 +68,7 @@ public interface TenderRepository extends JpaRepository<Tender,Long>,TenderCusto
 	  @Query(value = """
 	  			SELECT t.tender_id AS tenderId,
 				t.title AS title,
-				t.description AS description,
+		 		t.descriptionAS description,
 				t.status AS status,
 				ti.tender_item_id AS tenderItemId ,
 				ti.quantity AS quantity,
@@ -82,8 +86,52 @@ public interface TenderRepository extends JpaRepository<Tender,Long>,TenderCusto
 	  		""")
 	  List<TenderOrganizationResponse> findTenderOrgaqnizationDetails();
 	  
+	  @Query(value =  """
+						SELECT
+						    t.tender_number AS tenderNumber,
+						    t.title AS title, 
+						    t.status AS status,
+						    t.estimated_value AS estimatedValue,
+						    o.organization_name AS organizationName,
+						    o.department AS department,
+						    COUNT(DISTINCT ti.tender_item_id) AS totalItem,
+						    COUNT(DISTINCT b.bid_id) AS totalBid,
+						    MIN(b.bid_amount) AS LowestBidAmount,
+						    MAX(b.bid_amount) AS HighestBidAmount
+	
+						FROM tender t
+						
+						JOIN organization o
+						    ON t.organization_id = o.organization_id
+						
+						JOIN tender_item ti
+						    ON t.tender_id = ti.tender_id
+						
+						JOIN bid b
+						    ON t.tender_id = b.tender_id
+						
+						WHERE t.status = :status
+						  AND t.estimated_value > :estimatedValue
+						
+						group BY
+						    t.tender_number,
+						    t.title,
+						    t.status,
+						    t.estimated_value,
+						    o.organization_name,
+						    o.department;
+	  	
+	  		""",
+	  			nativeQuery =   true)
+			 
+	  List<TenderBidOrganizationReportProjection> findTenderBidOrganizationReport(@Param("status") String status,
+			  @Param("estimatedValue") BigDecimal estimatedValue);
+
+	  
+	  
+	  
+	  
+	  
 	  
 	  
 }
-
-

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tender.practice.mini_tenderproject.dto.TenderBidOrganizationReportResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderItemViewResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderOrganizationResponse;
+import com.tender.practice.mini_tenderproject.dto.TenderOrganizationResponse1;
 import com.tender.practice.mini_tenderproject.dto.TenderRequest;
 import com.tender.practice.mini_tenderproject.dto.TenderResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderStatusDetailsResponse;
@@ -60,13 +61,18 @@ public class TenderController {
 		return ResponseEntity.ok(tender);
 		
 	}
-	@GetMapping
-	public ResponseEntity<List<TenderResponse>>  getAllTenders(){
-		
-		List<TenderResponse> tenders =tenderServiceImpl.getAllTenders();
-		
-		return ResponseEntity.ok(tenders);
-	}	
+	
+//	
+//	@GetMapping
+//	public ResponseEntity<List<TenderResponse>>  getAllTenders(){
+//		
+//		List<TenderResponse> tenders =tenderServiceImpl.getAllTenders();
+//		
+//		return ResponseEntity.ok(tenders);
+//	}	
+//	
+	
+	
 	@PutMapping("/update/{id}")
 	public ResponseEntity<TenderResponse> updateTender(@PathVariable long id,@RequestBody TenderRequest request){
 		TenderResponse response = tenderServiceImpl.updateTenderResponse(id, request);
@@ -221,6 +227,32 @@ public class TenderController {
 		
 		
 	}
+	
+	@GetMapping("/getAllTenders")
+	public ResponseEntity<List<Object[]>> getAllTender(){
+		
+		return ResponseEntity.ok(tenderServiceImpl.getAllTenders());
+		
+	}
+	
+	@GetMapping("/get/status/{status}")
+	public ResponseEntity<List<TenderResponse>> getTenderByStatusS(@PathVariable String status){
+		
+		return ResponseEntity.ok(tenderServiceImpl.getTenderByStatus(status));
+		
+	}
+	
+	@GetMapping("/estimated/{estimatedValue}")
+	public ResponseEntity<List<TenderOrganizationResponse1>> getTenderByEstimatedValue(@PathVariable BigDecimal estimatedValue){
+		
+		return ResponseEntity.ok(tenderServiceImpl.getTenderByEstimatedValue(estimatedValue));
+		
+		
+	}
+	
+	
+	
+	
 	
 }
 

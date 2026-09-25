@@ -7,6 +7,7 @@ import com.tender.practice.mini_tenderproject.TenderStatusProjection.TenderStatu
 import com.tender.practice.mini_tenderproject.dto.TenderBidOrganizationReportResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderItemViewResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderOrganizationResponse;
+import com.tender.practice.mini_tenderproject.dto.TenderOrganizationResponse1;
 import com.tender.practice.mini_tenderproject.dto.TenderRequest;
 import com.tender.practice.mini_tenderproject.dto.TenderResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderStatusDetailsResponse;
@@ -21,7 +22,7 @@ public interface TenderService {
 	
 	TenderResponse getTenderById(Long id);
 	
-	List<TenderResponse> getAllTenders();
+	//List<TenderResponse> getAllTenders();
 	
 	TenderResponse updateTenderResponse(Long id , TenderRequest request);
 
@@ -65,7 +66,14 @@ public interface TenderService {
 	
 	List<TenderBidOrganizationReportResponse> gettenderBidOrganizationreport(String status , BigDecimal estimatedValue);
 	
+	//ENTITY manager Task
 	
+	List<Object[]> getAllTenders();
+	
+	
+	List<TenderResponse> getTendersByStatus(String status);
+	
+	List<TenderOrganizationResponse1> getTenderByEstimatedValue(BigDecimal estimatedValue);
 	
 	
 }

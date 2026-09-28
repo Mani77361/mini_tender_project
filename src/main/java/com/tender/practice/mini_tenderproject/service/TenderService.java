@@ -3,9 +3,12 @@ package com.tender.practice.mini_tenderproject.service;
 import java.math.BigDecimal;
 import java.util.List;
 
-import com.tender.practice.mini_tenderproject.TenderStatusProjection.TenderStatusProjection;
+import com.tender.practice.mini_tenderproject.dto.TenderBidCountResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderBidOrganizationReportResponse;
+import com.tender.practice.mini_tenderproject.dto.TenderBidSatisticsResponse;
+import com.tender.practice.mini_tenderproject.dto.TenderItemCountResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderItemViewResponse;
+import com.tender.practice.mini_tenderproject.dto.TenderOrganizationReportResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderOrganizationResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderOrganizationResponse1;
 import com.tender.practice.mini_tenderproject.dto.TenderRequest;
@@ -13,8 +16,7 @@ import com.tender.practice.mini_tenderproject.dto.TenderResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderStatusDetailsResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderStatusRequest;
 import com.tender.practice.mini_tenderproject.dto.TenderStatusResponse;
-import com.tender.practice.mini_tenderproject.entity.Tender;
-import com.tender.practice.mini_tenderproject.projection.TenderItemViewProjection;
+import com.tender.practice.mini_tenderproject.dto.tenderItemOrganizationBidsResponse;
 
 public interface TenderService {
 	
@@ -74,6 +76,16 @@ public interface TenderService {
 	List<TenderResponse> getTendersByStatus(String status);
 	
 	List<TenderOrganizationResponse1> getTenderByEstimatedValue(BigDecimal estimatedValue);
+	
+	List<TenderOrganizationReportResponse> getTenderOrganizationReport(String organizationName);
+	
+	List<TenderItemCountResponse> findTenderItemCount();
+	
+	List<TenderBidCountResponse> getTenderBidCount();
+	
+	List<TenderBidSatisticsResponse> getTenderBidSatisetics();
+	
+	List<tenderItemOrganizationBidsResponse> getTenderItemOrganizationBids();
 	
 	
 }

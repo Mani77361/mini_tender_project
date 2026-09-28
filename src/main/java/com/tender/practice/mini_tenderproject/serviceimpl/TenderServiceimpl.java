@@ -9,12 +9,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.tender.practice.mini_tenderproject.MiniTenderprojectApplication;
 import com.tender.practice.mini_tenderproject.TenderStatusProjection.TenderStatusProjection;
-import com.tender.practice.mini_tenderproject.controller.TenderController;
-import com.tender.practice.mini_tenderproject.controller.tenderItemController;
+import com.tender.practice.mini_tenderproject.dto.TenderBidCountResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderBidOrganizationReportResponse;
+import com.tender.practice.mini_tenderproject.dto.TenderBidSatisticsResponse;
+import com.tender.practice.mini_tenderproject.dto.TenderItemCountResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderItemViewResponse;
+import com.tender.practice.mini_tenderproject.dto.TenderOrganizationReportResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderOrganizationResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderOrganizationResponse1;
 import com.tender.practice.mini_tenderproject.dto.TenderRequest;
@@ -22,13 +23,15 @@ import com.tender.practice.mini_tenderproject.dto.TenderResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderStatusDetailsResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderStatusRequest;
 import com.tender.practice.mini_tenderproject.dto.TenderStatusResponse;
+import com.tender.practice.mini_tenderproject.dto.tenderItemOrganizationBidsResponse;
 import com.tender.practice.mini_tenderproject.entity.Tender;
 import com.tender.practice.mini_tenderproject.projection.TenderBidOrganizationReportProjection;
 import com.tender.practice.mini_tenderproject.projection.TenderItemViewProjection;
-import com.tender.practice.mini_tenderproject.projection.TenderOrganizationProjection;
 import com.tender.practice.mini_tenderproject.repository.TenderCustomRepository;
 import com.tender.practice.mini_tenderproject.repository.TenderRepository;
 import com.tender.practice.mini_tenderproject.service.TenderService;
+
+import jakarta.persistence.Tuple;
 
 @Service
 public class TenderServiceimpl implements TenderService {
@@ -151,6 +154,7 @@ public class TenderServiceimpl implements TenderService {
 
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	public void deleteTenderById(Long id) {
 
@@ -401,7 +405,9 @@ public class TenderServiceimpl implements TenderService {
 						r.getTotalBid(), r.getLowestBidAmount(), r.getHighestBidAmount()))
 				.toList();
 	}
-
+//Get all tenders--------------------------------
+	
+	
 	@Override
 	public List<Object[]> getAllTenders() {
 
@@ -409,7 +415,8 @@ public class TenderServiceimpl implements TenderService {
 
 		return result;
 	}
-
+//Get tenders by status---------------------------------
+	
 	@Override
 	public List<TenderResponse> getTendersByStatus(String status) {
 		
@@ -438,7 +445,10 @@ public class TenderServiceimpl implements TenderService {
 		
 		return responseList;
 	}
-
+	
+	
+//Find tenders where estimated value is greater than a given value.-------------------------------------------------------
+	
 	@Override
 	public List<TenderOrganizationResponse1> getTenderByEstimatedValue(BigDecimal estimatedValue) {
 	
@@ -460,6 +470,150 @@ public class TenderServiceimpl implements TenderService {
 
 	    return responseList;
 	}
+
+	@Override
+	public List<TenderOrganizationReportResponse> getTenderOrganizationReport(String organizationName) {
+		
+		List<Object[]> result = tenderCustomRepository.findTenderByOrganization(organizationName);
+		
+		List<TenderOrganizationReportResponse> responseList =new ArrayList<>();
+		
+		for(Object[] row : result) {
+			
+			TenderOrganizationReportResponse response = new TenderOrganizationReportResponse();
+			
+			response.setTenderNumber((String) row[0]);
+			response.setTitle((String) row[1]);
+			response.setStatus((String) row[2]);
+			response.setOrganizationName((String) row[3]);
+			response.setDepartment((String) row[4]);
+			
+			responseList.add(response);
+			
+			
+		}
+		return responseList;
+	}
+//Find tenders belonging to a particular organization.----------------------------------------
+	@Override
+	public List<TenderItemCountResponse> findTenderItemCount() {
+		
+		List<Object[]> result = tenderCustomRepository.findTenderItemCount();
+		
+		List<TenderItemCountResponse> responselist = new ArrayList<>();
+		
+		for(Object[] row : result) {
+			
+			TenderItemCountResponse response = new TenderItemCountResponse();
+			
+			response.setId((Long) row[0]);
+			response.setTenderNumber((String) row[1]);
+			response.setTitle((String) row[2] );
+			response.setStatus((String) row[3]);
+			response.setTotalItem((Long) row[4]);
+			
+			responselist.add(response);
+		
+		
+		}
+		
+	
+		return responselist;
+	}
+
+	@Override
+	public List<TenderBidCountResponse> getTenderBidCount() {
+		
+		List<Object[]> result =tenderCustomRepository.findTenderBidCount();
+		
+		
+		List<TenderBidCountResponse> responseList=new ArrayList<>();
+		 for(Object[] row : result) {
+			 TenderBidCountResponse response = new TenderBidCountResponse();
+			 
+			 response.setId((Long) row[0]);
+			 response.setTenderNumber((String) row[1]);
+			 response.setTitle((String) row[2]);
+			 response.setStatus((String) row[3]);
+			 response.setBidCount((Long) row[4]);
+			 
+			 responseList.add(response);
+			 
+		 }
+ 		return responseList;
+	}
+
+	
+	
+	
+	@Override
+	public List<TenderBidSatisticsResponse> getTenderBidSatisetics() {
+	
+		List<Object[]> response = tenderCustomRepository.findTenderBidStatistics();
+		 List<TenderBidSatisticsResponse> responseList  = new ArrayList<>();
+		 
+		 for(Object[] row : response) {
+			 
+			 TenderBidSatisticsResponse result = new TenderBidSatisticsResponse();
+			 
+			 result.setTenderNumber((String) row[0]);
+			 result.setTitle((String) row[1]);
+			 result.setMinAmount((BigDecimal) row[2]);
+			 result.setMaxAmount((BigDecimal) row[3]);
+			 result.setAvrageAmount((BigDecimal) row[4]);
+			 
+			 responseList.add(result);
+		 }
+		
+		return responseList;
+	}
+
+	@Override
+	public List<tenderItemOrganizationBidsResponse> getTenderItemOrganizationBids() {
+
+		
+		List<Tuple> result =tenderCustomRepository.findTenderItemOrganizationBids();
+		
+		List<tenderItemOrganizationBidsResponse> responseList = new ArrayList<>();
+		
+		for(Tuple tuble : result) {
+			
+			tenderItemOrganizationBidsResponse response =new tenderItemOrganizationBidsResponse();
+			
+			response.setId(tuble.get("id" ,Long.class));
+			response.setTenderNumber(tuble.get("tenderNumber",String.class));
+			response.setTitle(tuble.get("title" ,String.class));
+			response.setStatus(tuble.get("status",String.class));
+			response.setEstimatedValue(tuble.get("estimatedValue" ,BigDecimal.class));
+			response.setOrganizationName(tuble.get("organizationName" , String.class));
+			response.setDepartment(tuble.get("department",String.class));
+			response.setTotalItem(tuble.get("totalItem",Long.class));
+			response.setTotalBids(tuble.get("totalBids",Long.class));
+			response.setLowestBid(tuble.get("LowestBid",BigDecimal.class));
+			response.setHighestBid(tuble.get("highestBid",BigDecimal.class));
+			/*
+			 * response.setId((Long) row[0]);
+			 *  response.setTenderNumber((String) row[1]);
+			 * response.setTitle((String) row[2]);
+			 *  response.setStatus((String) row[3]);
+			 * response.setEstimatedValue((BigDecimal) row[4]);
+			 * response.setOrganizationName((String) row[5]);
+			 * response.setDepartment((String) row[6]); 
+			 * response.setTotalItem((Long)row[7]);
+			 *  response.setTotalBid((Long) row[8]);
+			 * response.setLowestBid((BigDecimal) row[9]);
+			 * response.setHighestBid((BigDecimal) row[10]);
+			 */
+			responseList.add(response);
+		}
+	
+		return responseList;
+	}
+	
+
+	
+	
+	
 
 	
 	

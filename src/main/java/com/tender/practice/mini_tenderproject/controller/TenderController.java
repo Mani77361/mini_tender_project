@@ -3,7 +3,6 @@ package com.tender.practice.mini_tenderproject.controller;
 import java.math.BigDecimal;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,8 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tender.practice.mini_tenderproject.dto.TenderBidCountResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderBidOrganizationReportResponse;
+import com.tender.practice.mini_tenderproject.dto.TenderBidSatisticsResponse;
+import com.tender.practice.mini_tenderproject.dto.TenderItemCountResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderItemViewResponse;
+import com.tender.practice.mini_tenderproject.dto.TenderOrganizationReportResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderOrganizationResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderOrganizationResponse1;
 import com.tender.practice.mini_tenderproject.dto.TenderRequest;
@@ -25,8 +28,7 @@ import com.tender.practice.mini_tenderproject.dto.TenderResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderStatusDetailsResponse;
 import com.tender.practice.mini_tenderproject.dto.TenderStatusRequest;
 import com.tender.practice.mini_tenderproject.dto.TenderStatusResponse;
-import com.tender.practice.mini_tenderproject.projection.TenderBidOrganizationReportProjection;
-import com.tender.practice.mini_tenderproject.repository.TenderRepository;
+import com.tender.practice.mini_tenderproject.dto.tenderItemOrganizationBidsResponse;
 import com.tender.practice.mini_tenderproject.serviceimpl.TenderServiceimpl;
 
 
@@ -250,7 +252,45 @@ public class TenderController {
 		
 	}
 	
-	
+	@GetMapping("/organizationName")
+	public ResponseEntity<List<TenderOrganizationReportResponse>> getTenderOrganizationReport(@RequestParam String organizationName){
+		
+		return ResponseEntity.ok(tenderServiceImpl.getTenderOrganizationReport(organizationName));
+		
+		
+	}
+	@GetMapping("/tenderCount")
+	public ResponseEntity<List<TenderItemCountResponse>> getTenderItemCount(){
+		
+	List<TenderItemCountResponse>	response=tenderServiceImpl.findTenderItemCount();
+		
+		return  ResponseEntity.ok(response);
+		
+		
+	} 
+	@GetMapping("/tenderBidCount")
+	public ResponseEntity<List<TenderBidCountResponse>> getTenderBidCount(){
+		
+		List<TenderBidCountResponse> response = tenderServiceImpl.getTenderBidCount();
+		
+		return ResponseEntity.ok(response);
+		
+	}
+	@GetMapping("/bid")
+	public ResponseEntity<List<TenderBidSatisticsResponse>> getTenderBidSatisetics(){
+		
+		List<TenderBidSatisticsResponse> response = tenderServiceImpl.getTenderBidSatisetics();
+		
+		return ResponseEntity.ok(response);
+ 		
+	}
+	@GetMapping("/tenderbidorg")
+	public ResponseEntity<List<tenderItemOrganizationBidsResponse>> getTenderItemOrganizationBids(){
+		List<tenderItemOrganizationBidsResponse> response =tenderServiceImpl.getTenderItemOrganizationBids();
+		
+		return ResponseEntity.ok(response);
+		
+	}
 	
 	
 	
